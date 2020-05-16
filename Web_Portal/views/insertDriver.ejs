@@ -1,0 +1,418 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <title>Add New Driver</title>
+    <% include partials/head %>
+
+    <style>
+        a:hover {
+            color: #337ab7;
+        }
+
+        #main-menu>li.active>a,
+        #main-menu>li.active>a:focus,
+        #main-menu>li.active>a:hover {
+            color: #ffffff;
+            cursor: pointer;
+            background-color: #fc4040;
+            border: 1px solid #fc4040;
+            border-bottom-color: transparent
+        }
+
+        #thumbnail {
+            margin: 10px 0;
+        }
+
+        .form-example-wrap {
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <% include partials/topBar %>
+    <!-- Mobile Menu start 
+    <div class="mobile-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul class="mobile-menu-nav">
+                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home</a>
+                                    <ul class="collapse dropdown-header-top">
+                                        <li><a href="index.html">Dashboard One</a></li>
+                                        <li><a href="index-2.html">Dashboard Two</a></li>
+                                        <li><a href="index-3.html">Dashboard Three</a></li>
+                                        <li><a href="index-4.html">Dashboard Four</a></li>
+                                        <li><a href="analytics.html">Analytics</a></li>
+                                        <li><a href="widgets.html">Widgets</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+     Mobile Menu end -->
+
+    <!-- Main Menu area start
+   <div class="main-menu-area mg-tb-40">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <ul id="main-menu" class="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
+                    <li ><a href="/dashboard"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="active" ><a data-toggle="tab" href="#drivers"><i class="fa fa-users"></i> Manage Drivers</a></li>
+                    <li><a href="/messenger"><i class="fa fa-envelope"></i> Messages</a></li>
+                    <li><a href="/updateProfile"><i class="fa fa-list"></i> Edit Profile</a></li>
+                    <li><a href="/logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                </ul>
+                <div class="tab-content custom-menu-content">
+                    <div id="drivers" class="tab-pane active notika-tab-menu-bg animated flipInX">
+                        <ul class="notika-main-menu-dropdown">
+                            <li><a href="/crud/list-of-drivers"><i class="fa fa-list"></i> List of Drivers</a>
+                            </li>
+                            <li><a href="/crud/add"><i class="fa fa-user-plus"></i> Add New Driver</a></li>
+                        
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ Main Menu area End-->
+    <div class="container-fluid" style="padding-left: 0;">
+        <div class="row">
+            <div class="col-md-2">
+                <div id="cssmenu">
+                        <img src="../public/img/innerLogo.png" width="160px" style=" margin-left: 60px; margin-top: -130px;" />
+                    <ul>
+                        <li><a href="/dashboard"><i class="fa fa-fw fa-home"></i> Dashboard</a></li>
+                        <li class="has-sub active open"><a href="#"><i class="fa fa-fw fa-users"></i> Manage Drivers</a>
+                            <ul>
+                                <li><a href="/crud/add"><i class="fa fa-fw fa-user-plus"></i> Add New Driver</a></li>
+                                <li ><a href="/crud/list-of-drivers"><i class="fa fa-fw fa-list"></i> List of Drivers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="/messenger"><i class="fa fa-fw fa-commenting"></i> Messenger</a></li>
+                        <li><a href="/updateProfile"><i class="fa fa-fw fa-newspaper-o"></i> My Profile</a>
+                        </li>
+                        <li><a href="/logout"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <!-- Breadcomb area Start-->
+                <div class="breadcomb-area">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="breadcomb-list">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="breadcomb-wp">
+                                                <div class="breadcomb-icon">
+                                                    <i class="fa fa-user-plus"></i>
+                                                </div>
+                                                <div class="breadcomb-ctn">
+                                                    <h2>Add New Driver</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Breadcomb area End-->
+
+                <div class="form-example-area">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-example-wrap">
+                                    <form id="uploadForm" enctype="multipart/form-data" action="/crud/api"
+                                        method="post">
+                                        <div class="cmp-tb-hd">
+                                            <h2>Personal Details</h2>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>First Name*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="fname" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Last Name*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="lname" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Date of Birth</label>
+                                                            <input type="text" class="form-control input-sm date"
+                                                                data-mask="99/99/9999" placeholder="dd/mm/yyyy"
+                                                                name="dob" id="dob">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>CNIC*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                data-mask="99999-9999999-9" name="cnic" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Phone Number*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="phone" data-mask="9999-9999999" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Address*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="address" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                        <div class="cmp-tb-hd">
+                                            <h2>Login Credentials</h2>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Email*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="email"
+                                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Password*</label>
+                                                            <input type="password" class="form-control input-sm"
+                                                                name="pwd" id="pwd" required>
+                                                        </div>
+                                                        <input type="checkbox" onclick="myFunction()">Show Password
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>Confirm Password*</label>
+                                                            <input type="password" class="form-control input-sm"
+                                                                name="cpwd" id="cpwd" required>
+                                                        </div>
+                                                        <input type="checkbox" onclick="myFunction2()">Show Password
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                        <div class="cmp-tb-hd">
+                                            <h2>License Details</h2>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>License Provider</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="license">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>License Number*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="lcnumber" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>License City</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                name="lccity">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div class="form-example-int form-example-st">
+                                                    <div class="form-group">
+                                                        <div class="nk-int-st">
+                                                            <label>License Expiry Date*</label>
+                                                            <input type="text" class="form-control input-sm"
+                                                                data-mask="99/99/9999" placeholder="dd/mm/yyyy"
+                                                                name="lcdate" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                        <div class="cmp-tb-hd">
+                                            <h2>Profile Picture*</h2>
+                                        </div>
+                                        <div class="row" style="padding-left: 15px;">
+                                            <input type="file" name="userPhoto" id="userPhoto" />
+                                            <img id="thumbnail" width="150px" />
+                                            <div style="display: none" id="alert-success" name="alert-success"
+                                                class="alert alert-success" role="alert">New driver added successfully!
+                                            </div>
+                                            <span id="status"></span>
+                                        </div>
+                                        <button type="submit" class="btn"><i
+                                                class="fa fa-save"></i>&nbsp;&nbsp;&nbsp;Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <!-- Input Mask JS
+		============================================ -->
+    <script src="../js/jasny-bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#thumbnail').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function myFunction() {
+            var x = document.getElementById("pwd");
+
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+        function myFunction2() {
+            var x = document.getElementById("cpwd");
+
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
+        $(document).ready(function () {
+            $("#userPhoto").change(function () {
+                readURL(this);
+            });
+            $('#uploadForm').submit(function () {
+                $("#status").empty().text("File is uploading...");
+                $(this).ajaxSubmit({
+
+                    error: function (xhr) {
+                        status('Error: ' + xhr.status);
+                    },
+
+                    success: function (response) {
+                        console.log(response)
+                        $("#status").empty().text(response);
+                    }
+                });
+                return false;
+            });
+            $('#cpwd').on('keyup', function () {
+
+                if ($('#pwd').val() == $('#cpwd').val()) {
+                    $('#message').html('Matching').css('color', 'green');
+                }
+                else
+                    $('#message').html('Not Matching').css('color', 'red');
+
+
+            });
+
+
+
+        });
+    </script>
+
+
+
+    <% include partials/foot %>
+</body>
+
+</html>

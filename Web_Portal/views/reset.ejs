@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Change Password</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Driver Management System">
+        <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+        <meta name="author" content="Wajeeha Jamil">
+        
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Mukta');
+            body{
+                font-family: 'Mukta', sans-serif;
+                height:100vh;
+                min-height:550px;
+                background-image: url(http://www.planwallpaper.com/static/images/Free-Wallpaper-Nature-Scenes.jpg);
+                background-repeat: no-repeat;
+                background-size:cover;
+                background-position:center;
+                position:relative;
+                overflow-y: hidden;
+            }
+            .login-reg-panel{
+                position: relative;
+                margin-top: 100px;
+	            text-align: center;
+                width: 100%;
+	            right:5; left: 0;
+                height: 400px;
+                padding: 0 250px;
+            }
+            a{
+                text-decoration:none;
+                color:#444444;
+            }
+            .white-panel{
+                background-color: rgba(255,255, 255, 1);
+                height: 650px;
+                position: absolute;
+                top: -10px;
+                width: 50%;
+                transition:.3s ease-in-out;
+                z-index:0;
+                box-shadow: 0 0 15px 9px #00000096;
+                overflow: auto;
+            }
+            .login-reg-panel input[type="radio"]{
+                position:relative;
+                display:none;
+            }
+            .login-reg-panel #label-login, 
+            .login-reg-panel #label-register{
+                border:1px solid #f9f9f9;
+                padding:5px 5px;
+                width:150px;
+                display:block;
+                text-align:center;
+                border-radius:10px;
+                cursor:pointer;
+                font-weight: 600;
+                font-size: 18px;
+            }
+            .over-img{       
+                margin: -50px 130px 40px 130px; 
+                width: 200px;
+                }
+            .login-info-box {
+                background-color: rgba(0, 0, 0, 0.4);
+                width:30%;
+                padding: 20px 50px;
+                top:50%;
+                left:16%;
+                position:absolute;
+                text-align:left;
+                color: #f9f9f9;
+            }
+            .register-info-box {
+                background-color: rgba(0, 0, 0, 0.4);
+                width:30%;
+                padding:20px 50px;
+                top:50%;
+                right:12%;
+                position:absolute;
+                text-align:left;
+                color: #f9f9f9;
+            }
+            .right-log {
+                right:50px !important;
+            }
+            .login-show, 
+            .register-show{
+                z-index: 1;
+                display:none;
+                opacity:0;
+                transition:0.3s ease-in-out;
+                color:#242424;
+                text-align:left;
+                padding:50px;
+            }
+            .login-show {
+                padding-top: 90px;
+            }
+            .show-log-panel{
+                display:block;
+                opacity:0.9;
+            }
+            .login-show input[type="text"], .login-show input[type="password"]{
+                width: 100%;
+                display: block;
+                margin:20px 0;
+                padding: 20px;
+                border: 1px solid #625e5e;
+                outline: none;
+            }
+            .login-show input[type="submit"] {
+                max-width: 150px;
+                width: 100%;
+                background: #444444;
+                color: #f9f9f9;
+                border: none;
+                padding: 10px;
+                text-transform: uppercase;
+                border-radius: 2px;
+                float:right;
+                cursor:pointer;
+            }
+            .login-show a{
+                display:inline-block;
+                padding:10px 0;
+            }
+           
+           
+            .credit {
+                position:absolute;
+                bottom:10px;
+                left:10px;
+                color: #3B3B25;
+                margin: 0;
+                padding: 0;
+                font-family: Arial,sans-serif;
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: bold;
+                letter-spacing: 1px;
+                z-index: 99;
+            }
+            a {
+                text-decoration:none;
+                color:#2c7715;
+            }
+            .col-md-3{
+                position: relative; width: 100%;
+                display: inline-block;
+            }
+            
+            h3 {
+             top: 300px; left: 7%; width: 80%;
+             color: #f9f9f9;
+                margin-left: 40px;
+              }
+           
+            
+            
+        </style>
+        
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                   <div class="login-reg-panel">
+                        <div class="white-panel">
+                            <div class="login-show">
+                                <img src="http://localhost:3000/img/test.png" class="over-img" />
+                                <h2>Change Password</h2>
+                                <form action="/auth/reset/<%= reset.resetPasswordToken %>" method="post">
+                                <input type="password" placeholder="New Password" class="validate" required name="password" >
+                                <input type="password" placeholder="Confirm Password" class="validate" required name="cpassword">
+                                <input type="submit" value="Reset Password" style="margin-right: 10px">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+        <!-- Input Mask JS
+		============================================ -->
+        <script src="../js/jasny-bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.login-info-box').fadeOut();
+                $('.login-show').addClass('show-log-panel');
+            });
+
+            $('.login-reg-panel input[type="radio"]').on('change', function() {
+
+                $('#cpassword').on('keyup', function () {
+                    
+                    if ($('#password').val() == $('#cpassword').val()) {
+                        $('#message').html('Matching').css('color', 'green');
+                    }
+                     else 
+                        $('#message').html('Not Matching').css('color', 'red');
+                    
+                     
+                });     
+            });
+
+           
+        </script>
+    </body>
+</html>

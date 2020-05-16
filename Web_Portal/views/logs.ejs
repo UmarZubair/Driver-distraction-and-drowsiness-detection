@@ -1,0 +1,548 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <title>Driver Distraction Logs</title>
+    <% include partials/head %>
+    <!-- feather Awesome -->
+    <link rel="stylesheet" type="text/css" href="..\files\assets\icon\feather\css\feather.css">
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+
+    <style>
+        
+         .card {
+            padding-top: 20px;
+            margin: 10px 0 0 0;
+            background-color: rgba(214, 224, 226, 0.2);
+            border-top-width: 0;
+            border-bottom-width: 2px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .card.hovercard {
+            position: relative;
+            padding-top: 0;
+            overflow: hidden;
+            text-align: center;
+            background-color: rgba(214, 224, 226, 0.1);
+        }
+        .card.hovercard .cardheader {
+            background: url("../images/header-bg.png");
+            background-size: cover;
+            height: 200px;
+        }
+        .card.hovercard .avatar {
+            position: relative;
+            top: -155px;
+            margin-bottom: -140px;
+        }
+        .card.hovercard .avatar img {
+            width: 200px;
+            height: 200px;
+            max-width: 200px;
+            max-height: 200px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            border: 5px solid rgb(255,255,255);
+        }
+        .card.hovercard .info {
+            padding: 0px 8px 10px;
+        }
+        .card.hovercard .info .title {
+            margin-bottom: 4px;
+            font-size: 24px;
+            line-height: 1;
+            color: #262626;
+            vertical-align: middle;
+        }
+
+        .log-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+            border: none;
+            margin-bottom: 30px;
+        }
+        .log-card .log-card-header h4 {
+            margin-bottom: 0;
+            color: #fff;
+            font-size: 19px;
+            font-weight: 600;
+        }
+        .log-card-block {
+            padding: 1.25rem;
+        }
+        .log-card-block h2 {
+            border: 1px solid #ccc;
+            padding: 30px 30px;
+            color: #ccc;
+            text-align: center;
+        }
+        .latest-activity-card .log-card-block .latest-update-box {
+            position: relative;
+        }
+        
+        .latest-activity-card .log-card-block .latest-update-box .update-meta {
+            z-index: 2;
+            min-width: 160px;
+        }
+        
+        .log-card .log-card-block p {
+            line-height: 25px;
+            text-align: left;
+        }
+        .log-card .log-card-block .log-box p {
+            margin-left: 70px;
+            color: #aaa7a7;
+            line-height: 20px;
+            margin-top: 8px;
+            margin-bottom: 25px;
+        }
+        .latest-activity-card .log-card-block .latest-update-box .update-meta .update-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            padding: 12px 13px;
+            font-size: 16px;
+            color: #fff;
+            margin-left: 10px;
+            float: left;
+        }
+        .log-content {
+            margin-bottom: 20px;
+        }
+        .log-head {
+            background: linear-gradient(to bottom, #88aefb, #4267b2);
+            padding: 10px 10px;
+            margin: 10px 20px;
+            margin-bottom: 0;
+        }
+        .log-head h4 {
+            color: #fff;
+            margin-bottom: 0;
+        }
+        .log-body {
+            background-color: #fcfcfc;
+            border: 1px solid #f5f5f5;
+            margin: 0 20px;            
+        }
+        .log-desc {
+            margin-bottom: 20px;
+            padding: 10px 10px;
+            background-image: linear-gradient(#ebebeb, #f9f9f9);
+            border: 1px solid #ebebeb;
+        }
+        .log-desc p {
+            margin-bottom: 0;
+            font-size: 15px;
+        }
+        .log-box{
+            text-align: center;
+        }
+
+
+        /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 999999999; /* Sit on top */
+        padding-top: 50px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        }
+        /* Modal Content (image) */
+        .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        }
+        /* Add Animation */
+        .modal-content {  
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+        }
+        @-webkit-keyframes zoom {
+        from {-webkit-transform:scale(0)} 
+        to {-webkit-transform:scale(1)}
+        }
+        @keyframes zoom {
+        from {transform:scale(0)} 
+        to {transform:scale(1)}
+        }
+        /* The Close Button */
+        .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+        }
+        /* 100% Image Width on Smaller Screens */
+        @media only screen and (max-width: 700px){
+            .modal-content {
+                width: 100%;
+            }
+        }
+        .back-panel {
+            padding: 20px 14px;
+            background-color: #fbfbfb;
+            margin-bottom: 20px;
+        }
+        tspan {
+            font-size: 15px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <% include partials/topBar %>
+
+    <div class="container-fluid" style="padding-left: 0;">
+        <div class="row">
+            <div class="col-md-2">
+                <div id="cssmenu">
+                    <img src="../public/img/innerLogo.png" width="160px"
+                        style=" margin-left: 60px; margin-top: -130px;" />
+                    <ul>
+                        <li><a href="/dashboard"><i class="fa fa-fw fa-home"></i> Dashboard</a></li>
+                        <li class="has-sub active open"><a href="#"><i class="fa fa-fw fa-users"></i> Manage Drivers</a>
+                            <ul>
+                                <li><a href="/crud/add"><i class="fa fa-fw fa-user-plus"></i> Add New Driver</a></li>
+                                <li><a href="/crud/list-of-drivers"><i class="fa fa-fw fa-list"></i> List of Drivers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="/messenger"><i class="fa fa-fw fa-commenting"></i> Messenger</a></li>
+                        <li><a href="/updateProfile"><i class="fa fa-fw fa-newspaper-o"></i> My Profile</a>
+                        </li>
+                        <li><a href="/logout"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <!-- Breadcomb area Start-->
+                <div class="breadcomb-area">
+                    <div class="container" style="padding: 0;">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="breadcomb-list">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="breadcomb-wp">
+                                                <div class="breadcomb-icon">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                                <div class="breadcomb-ctn">
+                                                    <h2>Driver's Ride Logs</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Breadcomb area End-->
+
+                <div class="container" style="padding: 0;">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card hovercard">
+                                <div class="cardheader">
+                
+                                </div>
+                                <div class="avatar">
+                                    <%  var fullpath= '../' + driver.profilePicture.path; %>
+                                    <img alt="" src="<%= fullpath %>">
+                                </div>
+                                <div class="info">
+                                    <div class="title">
+                                        <%=driver.firstName + " " + driver.lastName%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 back-panel">
+                            <!-- <h4 style= "margin: 10px 16px; font-size: 20px; color: #333;">Driver Details: </h4> -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="log-card latest-activity-card">
+                                    <div class="log-card-header">
+                                        <div class="row">
+                                            <div class="log-card-block">
+                                                <%
+                                                var flags = [];
+                                                var dates = [];
+                                                var len = rides.length;
+                                                var i;
+                                                rides.forEach(ride => {
+                                                    if( flags[ride.ride_date]) {
+
+                                                    } else {                                                    
+                                                        flags[ride.ride_date] = true;
+                                                        dates.push(ride.ride_date);
+                                                    }
+                                                });
+
+                                                dates.forEach(date => {
+                                                    var dArr = date.split(" ");
+                                                    var newDate = dArr[0] + dArr[1].slice(0, -1) + dArr[2];
+                                                %>
+                                                <div class="log-content">
+                                                    <div class="log-head">
+                                                        <h4><i class="fa fa-calendar"></i>&nbsp;&nbsp;&nbsp;<%= date %></h4>
+                                                    </div>
+                                                    <div class="log-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-borderless evidences">
+                                                                <thead class="log-desc">
+                                                                    <tr>
+                                                                        <th>Rides</th>
+                                                                        <th>Duration</th>
+                                                                        <th>Performance Rate</th>
+                                                                        <th>Authorization Status</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% 
+                                                                    var num = 1;
+                                                                    rides.forEach(ride => {
+                                                                        if(ride.ride_date === date) {                                                                    
+                                                                    %> 
+                                                                    <tr style="cursor: pointer" class='clickable-row' data-href='/ridelogs?logID=<%=ride._id%>&dID=<%=ride.driverId%>'>
+                                                                        <td>Ride <%= num %></td>
+                                                                        <td><%= ride.start_time  %> to <%= ride.end_time %></td>
+                                                                        <td><%= ((ride.rate_distraction + ride.rate_drowsy) / 2).toFixed(2) %></td>
+                                                                        <% if (ride.authorized === 'AUTHORIZED') {
+                                                                        %>
+                                                                            <td><i class="fa fa-check" style="font-size: 18px; margin-right: 8px; color: #2ccc04; font-weight: bold;"></i><%= ride.authorized %></td>
+                                                                        <% }
+                                                                        if (ride.authorized === 'NOT AUTHORIZED') {
+                                                                        %>
+                                                                            <td><i class="fa fa-close" style="font-size: 18px; margin-right: 8px; color: #dd0707; font-weight: bold;"></i><%= ride.authorized %></td>
+                                                                        <%
+                                                                        } %>
+                                                                    </tr>
+                                                                    <%
+                                                                     num = num + 1;
+                                                                        } }); %>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div id="rides-chart-<%= newDate %>"></div>
+                                                    </div>
+                                                </div>
+                                                <% }); %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="container back-panel">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="log-card latest-activity-card">
+                                <div class="log-card-header">
+                                    <h4>Rides based Distraction logs</h4>
+                                </div>
+                                <div class="log-card-block">
+                                    <% var i = 0;
+                                    rides.forEach(ride => {
+                                        if(ride.distractions.length > 0) {
+                                            i = 1;
+                                    %>
+                                    <div class="log-content">
+                                        <div class="log-head">
+                                            <h4><i class="fa fa-calendar"></i>&nbsp;&nbsp;&nbsp;<%= ride.ride_date %></h4>
+                                        </div>
+                                        <div class="log-body">
+                                            <div class="log-desc">
+                                                <p>Ride started at "<%= ride.start_time %>" AND ended at "<%= ride.end_time %>"</p>
+                                            </div>
+                                            <div class="log-pics">
+                                                
+                                                    <div class="row">
+                                                        <%
+                                                        ride.distractions.forEach(dist => {
+                                                            var fullpath= '../' + dist.evidence_path;
+                                                        %>
+                                                        <div class="col-md-3 log-box">
+                                                            <img src="<%= fullpath %>" onclick='openImg("<%= dist._id %>", "<%= fullpath %>")' style="width:100%;max-width: 100px">
+                                                            <p>
+                                                                Distraction type: <%= dist.distraction_type %><br>
+                                                                At Time: <%= dist.distraction_time %>
+                                                            </p>
+                                                        </div>
+                                                    
+                                                    <% }) %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } 
+                                    }) 
+                                    if(i === 0) {
+                                    %>
+                                    
+                                        <h2>No Distrations found</h2>
+                    
+                                    <%
+                                    }
+                                    %> 
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+    <script>
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+        function openImg(id, img) {
+            modal.style.display = "block";
+            modalImg.src = img;
+        }
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() { 
+            modal.style.display = "none";
+        }
+        
+        
+        var flags = [];
+        var dates = [];
+        var len = '<%=rides.length%>';
+        var i;
+        '<% rides.forEach(ride => { %>'
+        if( flags['<%= ride.ride_date%>']) {
+
+        } else {                                                    
+            flags['<%= ride.ride_date%>'] = true;
+            dates.push('<%= ride.ride_date%>');
+        }
+        '<% }); %>'
+
+        dates.forEach(date => {
+            var dataDist = [];
+            var dataDrow = [];
+            var rate = [];
+            var dataX = [];
+            var dArr = date.split(" ");
+            var newDate = dArr[0] + dArr[1].slice(0, -1) + dArr[2];
+            var i = 0;
+          '<% rides.forEach(ride => { %>'
+            if('<%= ride.ride_date%>' === date) {
+                dataDist.push(Math.round(10 - parseFloat('<%= ride.rate_distraction %>')));
+                dataDrow.push(Math.round(10 - parseFloat('<%= ride.rate_drowsy %>')));
+                var a = (parseFloat('<%= ride.rate_drowsy %>') + parseFloat('<%= ride.rate_distraction %>'))/2;
+                var b = Math.round(a);
+                rate.push(b);
+                dataX.push(i);
+                i++;
+            }
+        '<%});%>' 
+
+        $("#rides-chart-"+ newDate).shieldChart({
+            theme: "light",
+            primaryHeader: {
+                text: "Driver's rides graph"
+            },
+            exportOptions: {
+                image: false,
+                print: false
+            },
+            axisY: {
+                title: {
+                    text: "Rate"
+                },
+                categoricalValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                labelFontColor: "red",
+            },
+            axisX: {
+                title: {
+                    text: "Rides"
+                },
+                categoricalValues: dataX, 
+                color: "#f00"
+            },
+            dataSeries: [{
+                seriesType: "bar",
+                collectionAlias: "Distraction",
+                data: dataDist
+            },{
+                seriesType: "bar",
+                collectionAlias: "Drowsiness",
+                data: dataDrow
+            },{
+                seriesType: "bar",
+                collectionAlias: "Performance",
+                data: rate,
+                color: "green"
+            }]
+        });
+    });
+        
+    $('defs').next().attr("fill", "#eee");
+    $('svg text[zIndex=8]').attr("display", "none"); 
+    $('svg text:nth-last-child(3)[zIndex=8]').attr("display", "none");
+    $('svg text:nth-last-child(4)[zIndex=8]').attr("display", "none");
+    $('svg text:nth-last-child(5)[zIndex=8]').attr("display", "none");
+        </script>
+
+    <% include partials/foot %>
+</body>
+
+</html>
+
+

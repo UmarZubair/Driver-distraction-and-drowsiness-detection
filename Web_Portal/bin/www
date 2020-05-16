@@ -1,0 +1,447 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('login:server');
+var http = require('http');
+var socket = require('socket.io');
+var Message = require('../db/message');
+var Manager = require('../db/manager');
+var Driver = require('../db/driver');
+var Ride = require('../db/ride');
+var Notification = require('../db/notification');
+var mongoose = require('mongoose');
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port, function () {
+  console.log('listening');
+});
+server.on('error', onError);
+server.on('listening', onListening);
+
+var io = socket(server);
+app.set('io', io);
+
+global.msg_notification =  0;
+
+io.on('connection', function (socket) {
+  console.log('made socket connection');
+
+
+  socket.on('messageArea', function (data) {
+
+    Message.findOneAndUpdate({ driverId: data.driverID },
+      { $set: { mmessage_status: 'read' } }).exec(
+        function (err, result) {
+          if (err) throw err;
+          else {
+            if(!result){
+              console.log('fail update')
+            }
+            console.log(result);
+            Message.findOne({ driverId: data.driverID }).exec(function (err, message) {
+              if (err)
+                throw err;
+              Message.find({mmessage_status: 'unread'}).exec( function (err, new_messages){
+                  if (err) throw err;
+                  else{
+                    var count = new_messages.length;
+                    console.log(count);
+                    io.sockets.emit('Read Badge', count, data.driverID);
+                  }
+              });
+              io.sockets.emit('messageArea', message);
+              
+            });
+          }
+    });
+  });
+
+  socket.on('ReadNotify', function (data) {
+   
+    Notification.findOneAndUpdate({ _id: data.notifyID },
+      { $set: { notification_status: 'read' } }).exec(
+        function (err, result) {
+          if (err) throw err;
+          else {
+            if(!result){
+              console.log('fail update')
+            }
+            
+              Notification.find({notification_status: 'unread'}).exec( function (err, new_notifications){
+                  if (err) throw err;
+                  else{
+                    var count1 = new_notifications.length;
+                    io.sockets.emit('ReadNotify', {count: count1, notifyID: data.notifyID});
+                  }
+              });
+          }
+    });
+  });
+
+
+
+socket.on('badge', function(abc, msg, driver) {
+  Message.find({mmessage_status: 'unread'}).exec( function (err, new_messages){
+    if (err) throw err;
+    else{
+      var count = new_messages.length ;
+      var ids = [];
+      var inIds = false;
+      new_messages.forEach(msg => {
+        ids.push(msg.driverId);
+      });
+      console.log(driver);
+      console.log("Badge called" );
+      //console.log( ids);
+
+     for(var i=0; i< ids.length; i++ ){
+        if(driver._id === ids[i]){
+          inIds = true;
+          break;
+        }
+        
+      }
+      if((!count == 0) && inIds === false ){
+        count = count + 1;
+        console.log(count);
+        console.log(inIds);
+        
+      }
+      else if((!count == 0) && inIds === true ){
+        console.log(count);
+        console.log(inIds);
+        }
+      else{
+        count = count + 1;
+        console.log(count);
+      }
+      io.sockets.emit('badge', count, msg, driver);
+    }
+  });
+});
+
+socket.on('myChat', function (data, driver, manager) {
+   var d = new Date();
+    newMsg = {
+        senderId: driver._id,
+        senderName: driver.firstName + ' '  + driver.lastName,
+        senderDP: driver.profilePicture.path,
+        receiverId: manager._id,
+        receiverName: manager.firstName + " " + manager.lastName,
+        receiverDP: "https://cdn3.iconfinder.com/data/icons/ringtone-music-instruments/512/letter-m-key-keyboard-3-512.png",
+        message_body: data,
+        message_date: d
+       
+  };
+
+  Message.findOneAndUpdate({ driverId: driver._id },
+    { $push: { chat: newMsg }, $set: { mmessage_status: 'unread', updateTime: d.getTime() } }).exec(
+      function (err, result) {
+        if (err) throw err;
+        else {
+          if (result == null) {
+            var message = new Message();
+            message.driverId = driver._id;
+            message.driverName = driver.firstName + ' '  + driver.lastName;
+            message.driverDP = driver.profilePicture.path;
+            message.updateTime = d.getTime();
+            message.mmessage_status=   'unread';
+            message.chat.push(newMsg);
+            message.save((err, result1) => {
+              if (err) throw err;
+              io.sockets.emit('myChat', newMsg, driver, manager);
+            });
+          }
+          else{
+            io.sockets.emit('myChat', newMsg, driver, manager);
+          }
+        }
+      }
+    );  
+  });
+
+  socket.on('chat', function (data) {            
+    var receiverDp = '';
+    Driver.findOne({ _id: data.rID }).exec(function (err, driver) {
+      if (err)
+        throw err;
+      receiverDp = driver.profilePicture.path;
+      newMsg = {
+        senderId: data.senderID,
+        senderName: data.senderName,
+        senderDP: "../public/img/m.png",
+        receiverId: data.rID,
+        receiverName: data.rName,
+        receiverDP: receiverDp,
+        message_body: data.message,
+        message_date: data.date
+      };
+      Message.findOneAndUpdate({ driverId: data.rID},
+        { $push: { chat: newMsg }, $set: { dmessage_status: 'unread', updateTime: data.updateTime } }).exec(
+          function (err, result) {
+            if (err) throw err;
+            else {
+              if (result == null) {
+                var message = new Message();
+                message.driverId = data.rID;
+                message.driverName = data.rName;
+                message.driverDP = receiverDp;
+                message.updateTime = data.updateTime;
+                message.dmessage_status=   'unread';
+                message.chat.push(newMsg);
+                message.save((err, result1) => {
+                  if (err) throw err;
+                  io.sockets.emit('chat', result1, newMsg);
+                });
+              }
+              else{
+                io.sockets.emit('chat', result, newMsg);
+              }
+            }
+          }
+        ); 
+    });
+  });
+
+  socket.on('new_ride', function (data) {
+    io.sockets.emit("new_ride", data);
+  });
+
+  socket.on('addDistractEvidence', function(id, count, seconds, evidence, sTime) {
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(months[today.getMonth()]);
+    var yyyy = today.getFullYear();
+    var date = mm + ' ' + dd + ', ' + yyyy;
+
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    var ampm = h >= 12 ? 'pm' : 'am';
+    h = h % 12;
+    h = h ? h : 12;
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+    var time = h + ":" + m + ":" + s + ' ' + ampm;
+
+    console.log(sTime + " " + id + " " + count + " " + seconds);
+    //var rateDistract =  (10-(((count)/seconds)*100)).toFixed(2);
+    
+    distraction = {
+      distraction_time: time,
+      distraction_type: "Distract",
+      evidence_path : evidence,
+      count: count,
+    };
+
+    Ride.findOneAndUpdate({ driverId: id, ride_date: date, start_time: sTime},
+      {$push: { distractions: distraction } }).exec(
+        function (err, result) {
+          if (err) throw err;
+          else {
+              console.log(result);     
+          }
+        }
+      );
+  });
+  
+  socket.on('addDrowsyEvidence', function(id, count, seconds, evidence, sTime) {
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(months[today.getMonth()]);
+    var yyyy = today.getFullYear();
+    var date = mm + ' ' + dd + ', ' + yyyy;
+
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    var ampm = h >= 12 ? 'pm' : 'am';
+    h = h % 12;
+    h = h ? h : 12;
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+    var time = h + ":" + m + ":" + s + ' ' + ampm;
+
+    console.log(sTime + " " + id + " " + count + " " + seconds);
+    //var rateDrowsy =  (10-(((count)/seconds)*100)).toFixed(2);
+
+    distraction = {
+      distraction_time: time,
+      distraction_type: "Drowsy",
+      evidence_path : evidence,
+      count: count,
+    };
+
+    Ride.findOneAndUpdate({ driverId: id, ride_date: date, start_time: sTime},
+      {$push: { distractions: distraction } }).exec(
+        function (err, result) {
+          if (err) throw err;
+          else {
+              console.log(result);     
+          }
+        }
+      );
+  });
+
+  socket.on('end_ride', function (data, a, b) { 
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(months[today.getMonth()]);
+    var yyyy = today.getFullYear();
+    var date = mm + ' ' + dd + ', ' + yyyy; 
+    Ride.findOne({ driverId: data.driverID, ride_date: date, start_time: data.startTime}).exec(function (err, ride) {
+      if (err) throw err;
+      else {
+        console.log(data.authName);
+        io.sockets.emit("end_ride", ride, data.authName, data.duration);
+      }
+    });
+  });
+
+  socket.on('notify', function (data) {
+    console.log(data.subject);
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(months[today.getMonth()]);
+    var yyyy = today.getFullYear();
+    var date = mm + ' ' + dd + ', ' + yyyy;
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    var ampm = h >= 12 ? 'pm' : 'am';
+    h = h % 12;
+    h = h ? h : 12;
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+    var time = h + ":" + m + ":" + s + ' ' + ampm;
+   
+    Ride.findOne({ driverId: data.driverID, ride_date: date, start_time: data.start_time}).exec(function (err, ride) {
+      if (err) throw err;
+      else {
+        data.rideID = ride._id;
+        var notify = new Notification();
+        var not_body="";
+        if(data.type == "Auth") {
+          not_body = "An unauthorized person is detected driving " + data.driverName + "'s vehicle..";
+        }
+        notify.notification_title = data.subject;
+        notify.notification_body = not_body;
+        notify.notification_type = data.type;
+        notify.notification_driverID = data.driverID;
+        notify.notification_driverDP = data.driverDP;
+        notify.notification_rideID = ride._id;
+        notify.notification_date = date;
+        notify.notification_time = time;
+        notify.notification_status= 'unread';
+        notify.save((err, result) => {
+          if (err) throw err;
+          console.log(result);
+          //io.sockets.emit('notify', data);
+        });
+      }
+    });
+  });
+
+  socket.on('badgeNotify', function(abc, data) {
+    Notification.find({notification_status: 'unread'}).exec( function (err, new_notification){
+      if (err) throw err;
+      else {
+        var count = new_notification.length ;
+        console.log(count);
+        Notification.findOne({}).sort({notification_time: -1, notification_date: -1}).exec( function (err, notification) {
+          var id = notification._id;
+          console.log(id);
+          data.notify_id = id;
+          data.body = notification.notification_body;
+          data.rideID = notification.notification_rideID;
+          io.sockets.emit('badgeNotify', count, data);
+        });
+      }
+    });
+  });
+
+})
+
+
+/**
+ * 
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

@@ -1,0 +1,569 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <title>Dashboard</title>
+    <% include partials/head %>
+</head>
+
+<body onload="startTime()">
+    <% include partials/topBar %>
+    <!-- Mobile Menu start -->
+    <!-- <div class="mobile-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul class="mobile-menu-nav">
+                                <li><a data-toggle="collapse" data-target="#Charts" href="#">Home</a>
+                                    <ul class="collapse dropdown-header-top">
+                                        <li><a href="index.html">Dashboard One</a></li>
+                                        <li><a href="index-2.html">Dashboard Two</a></li>
+                                        <li><a href="index-3.html">Dashboard Three</a></li>
+                                        <li><a href="index-4.html">Dashboard Four</a></li>
+                                        <li><a href="analytics.html">Analytics</a></li>
+                                        <li><a href="widgets.html">Widgets</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Mobile Menu end -->
+    <!-- Main Menu area start-->
+    <!-- <div class="main-menu-area mg-tb-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <ul id="main-menu" class="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
+                        <li class="active"><a href="/dashboard"><i class="fa fa-home"></i> Home</a></li>
+                        <li><a data-toggle="tab" href="#drivers"><i class="fa fa-users"></i> Manage Drivers</a></li>
+                        <li><a href="/messenger"><i class="fa fa-envelope"></i> Messages</a></li>
+                        <li><a href="/updateProfile"><i class="fa fa-list"></i> Edit Profile</a></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                    </ul>
+                    <div class="tab-content custom-menu-content">
+                        <div id="drivers" class="tab-pane notika-tab-menu-bg animated flipInX">
+                            <ul class="notika-main-menu-dropdown">
+                                <li><a href="/crud/list-of-drivers"><i class="fa fa-list"></i> List of Drivers</a>
+                                </li>
+                                <li><a href="/crud/add"><i class="fa fa-user-plus"></i> Add New Driver</a></li>
+                            
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Main Menu area End-->
+
+    <div class="container-fluid" style="padding-left: 0;">
+        <div class="row">
+            <div class="col-md-2">
+                <div id="cssmenu">
+                    <img src="../public/img/innerLogo.png" width="160px"
+                        style=" margin-left: 60px; margin-top: -130px;" />
+                    <ul>
+                        <li class="active"><a href="/dashboard"><i class="fa fa-fw fa-home"></i> Dashboard</a></li>
+                        <li class="has-sub"><a href="#"><i class="fa fa-fw fa-users"></i> Manage Drivers</a>
+                            <ul>
+                                <li><a href="/crud/add"><i class="fa fa-fw fa-user-plus"></i> Add New Driver</a></li>
+                                <li><a href="/crud/list-of-drivers"><i class="fa fa-fw fa-list"></i> List of Drivers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="/messenger"><i class="fa fa-fw fa-commenting"></i> Messenger</a></li>
+                        <li><a href="/updateProfile"><i class="fa fa-fw fa-newspaper-o"></i> My Profile</a>
+                        </li>
+                        <li><a href="/logout"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <p id="IdCount"></p>
+                <!-- Start Status area -->
+                <div class="container-fluid back-panel">
+                    <div class="notika-status-area">
+                        <!-- <div class="container"> -->
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30"
+                                    style="background: linear-gradient(to right, #fe9365, #feb798); box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);">
+                                    <div class="website-traffic-ctn">
+                                        <h4 style="color: white;">Total Drivers</h4>
+                                        <h2 style="color: white;"><span class="counter"><%= no_of_drivers %></span></h2>
+
+                                    </div>
+                                    <i style="font-size:31px; color: #fb6e31; margin:11px auto; margin-left: 80px;"
+                                        class="fa fa-group"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30 dk-res-mg-t-30"
+                                    style="background: linear-gradient(to right, #0ac282, #0df3a3); box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08); color : white;">
+                                    <div class="website-traffic-ctn">
+                                        <h4 style="color: white;">On-Going
+                                            Rides&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </h4>
+                                        <h2 style="color: white;"><span id="rides-count" class="counter"><%= ridesCount %></span></h2>
+
+                                    </div>
+                                    <i style="font-size:31px; color: #26a378; margin:11px auto;" class="fa fa-car"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30 dk-res-mg-t-30"
+                                    style="background: linear-gradient(to right, #fe5d70, #fe909d); box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);">
+                                    <div class="website-traffic-ctn">
+                                        <h4 style="color: white;">Today's Date</h4>
+                                        <h4 style="color: white;" id="date"></h4>
+
+                                    </div>
+                                    <i style="font-size:31px; color: #e93746; margin:11px auto; margin-left: 30px;"
+                                        class="fa fa-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30"
+                                    style="background: linear-gradient(to right, #01a9ac, #01dbdf); box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);">
+                                    <div class="website-traffic-ctn">
+                                        <h4 style="color: white;">Current
+                                            Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                                        <h4 style="color: white;" id="time"></h4>
+
+                                    </div>
+                                    <i style="font-size:32px; color: #109092; margin:11px auto; margin-left: 30px;"
+                                        class="fa fa-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  </div> -->
+                    </div>
+                    <!-- End Status area-->
+                    <!-- Start Sale Statistic area-->
+                    <div class="sale-statistic-area">
+                        <!-- <div class="container"> -->
+                        <div class="row">
+                            <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
+                                <div class="recent-items-wp notika-shadow mg-tb-30 sm-res-mg-t-30">
+                                    <div class="rc-it-ltd">
+                                        <div class="recent-items-ctn">
+                                            <div class="recent-items-title" style="background-color: #120f08;">
+                                                <h2 style="color: #fff; margin: 15px 20px">List of On-Going Rides</h2>
+                                            </div>
+                                        </div>
+                                        <div class="recent-items-inn">
+                                            <table class="table table-inner table-vmiddle">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Identity</th>
+                                                        <th>Name</th>
+                                                        <th>Current Location</th>
+                                                        <th>Distance Covered uptill now</th>
+                                                        <!--<th>Performance Rate uptill now (Out of 10)</th>-->
+                                                        <th>Authentication Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="ride_table">
+                                                   <!--  <p id = "emptyRides">No recent rides</p> -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="data-table-area">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="recent-items-wp notika-shadow mg-tb-30 sm-res-mg-t-30">
+                                        <div class="rc-it-ltd">
+                                            <div class="recent-items-ctn">
+                                                <div class="recent-items-title" style="background-color: #120f08;">
+                                                    <h2 style="color: #fff; margin: 15px 20px">Recently Completed Rides</h2>
+                                                </div>
+                                            </div>
+                                            <div class="recent-items-inn">
+                                                <div class="data-table-list">
+                                                    <div class="table-responsive">
+                                                        <table id="data-table-basic" class="table table-striped" data-page-length="5">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Identity</th>
+                                                                    <th>Name</th>
+                                                                    <th>Date</th>
+                                                                    <th>Authentication Status</th>
+                                                                    <th>Performance Rate (Out of 10)</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="recent_rides">
+                                                                <% var i=0 ;
+                                                                    rides.forEach(ride => {
+                                                                    var fullpath= '../' + ride.driverDP;
+                                                                    var rate = (ride.rate_distraction + ride.rate_drowsy) / 2;
+                                                                    var per = ((rate.toFixed(2) / 10) * 100).toFixed(2);
+                                                                %>
+                                                                <%
+                                                                    if(ride.authorized == "NOT AUTHORIZED") {
+                                                                %>
+                                                                <tr id="endRide-<%= ride._id %>" style="background-color: rgba(255, 0, 0, 0.2);">
+                                                                <% } else {
+                                                                    %>
+                                                                <tr id="endRide-<%= ride._id %>">
+                                                                    <%
+                                                                }
+                                                                %>
+                                                                    <td><img src="<%= fullpath %>" width="80px" style="border-radius: 40px;" /></td>
+                                                                    <td style="vertical-align: middle;"><%= ride.driverName %></td>
+                                                                    <td style="vertical-align: middle;"><%= ride.ride_date %></td>
+                                                                    <% if (ride.authorized === 'AUTHORIZED') {
+                                                                    %>
+                                                                        <td style="vertical-align: middle;"><i class="fa fa-check" style="font-size: 18px; margin-right: 8px; color: #2ccc04; font-weight: bold;"></i><%= ride.authorized %></td>
+                                                                    <% }
+                                                                    if (ride.authorized === 'NOT AUTHORIZED') {
+                                                                    %>
+                                                                        <td style="vertical-align: middle;"><i class="fa fa-close" style="font-size: 18px; margin-right: 8px; color: #dd0707; font-weight: bold;"></i><%= ride.authorized %></td>
+                                                                    <%
+                                                                    } %>
+                                                                    <td style="vertical-align: middle;"><%= rate.toFixed(2) %><div class="progress">
+                                                                        <% if(per > 85) {
+                                                                            %>
+                                                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+                                                                            aria-valuemin="0" aria-valuemax="100" style="width: <%=per%>%">
+                                                                            <%
+                                                                        } else if (per >= 40 || per <= 85) {
+                                                                            %>
+                                                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+                                                                            aria-valuemin="0" aria-valuemax="100" style="width:<%=per%>%">
+                                                                            <%
+                                                                        } else{
+                                                                            %>
+                                                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
+                                                                            aria-valuemin="0" aria-valuemax="100" style="width:<%=per%>%">
+                                                                            <%
+                                                                        }
+
+                                                                        %>
+                                                                            
+                                                                            <%= per %>%
+                                                                            </div>
+                                                                          </div>
+                                                                        </td>
+                                                                        <td style="vertical-align: middle;"><a style="text-decoration: underline;" target="_blank" href="/ridelogs?logID=<%= ride._id %>&dID=<%= ride.driverId %>">View Details</a></td>
+                                                                </tr>
+                                                                <% }) %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <div class="statistic-right-area notika-shadow mg-tb-30 sm-res-mg-t-0"
+                                    style="margin-top: 0px;">
+                                    <div class="past-day-statis">
+                                        <h2>Highly Distracted Drivers</h2>
+                                        <p>The 3 most distracted drivers detected based on distraction and drowsiness
+                                            rate.</p>
+                                    </div>
+                                    <div class="past-statistic-an drates">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-message-img">
+                                                <a
+                                                    href="http://localhost:3000/crud/account?id=5d480f85859de23088a6c92c"><img
+                                                        src="http://localhost:3000/37576-3861731-2.jpg" width="70px"
+                                                        height="70px" alt="" /></a>
+                                            </div>
+                                            <div style="width: 100%; margin-top:0;" class="hd-mg-ctn">
+                                                <h3>Umar Zubair</h3>
+                                                <div class="driver-infograph"
+                                                    style="background-color: rgba(231, 94, 94, 0.3);">
+                                                    <span class="percent"><span class="counter">80</span>% <i
+                                                            style="color: red;" class="fa fa-arrow-up"></i></span><br />
+                                                    <span class="pername">Drowsiness Rate</span>
+                                                </div>
+                                                <div class="driver-infograph">
+                                                    <span class="percent"><span class="counter">41</span>%</span><br />
+                                                    <span class="pername">Distraction Rate</span>
+                                                </div>
+                                                <div class="driver-infograph">
+                                                    <span class="percent"><span class="counter">23</span>%</span><br />
+                                                    <span class="pername">Unauthorization Rate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="past-statistic-an drates">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-message-img">
+                                                <img src="../img/post/1.jpg" width="70px" height="70px" alt="" />
+                                            </div>
+                                            <div style="width: 100%; margin-top:0;" class="hd-mg-ctn">
+                                                <h3>Jiya Malik</h3>
+                                                <div class="driver-infograph">
+                                                    <span class="percent"><span class="counter">55</span>%</span><br />
+                                                    <span class="pername">Drowsiness Rate</span>
+                                                </div>
+                                                <div class="driver-infograph"
+                                                    style="background-color: rgba(231, 94, 94, 0.3);">
+                                                    <span class="percent"><span class="counter">92</span>% <i
+                                                            style="color: red;" class="fa fa-arrow-up"></i></span><br />
+                                                    <span class="pername">Distraction Rate</span>
+                                                </div>
+                                                <div class="driver-infograph">
+                                                    <span class="percent"><span class="counter">13</span>%</span><br />
+                                                    <span class="pername">Unauthorization Rate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="past-statistic-an drates">
+                                        <div class="hd-message-sn">
+                                            <div class="hd-message-img">
+                                                <img src="../img/post/1.jpg" width="70px" height="70px" alt="" />
+                                            </div>
+                                            <div style="width: 100%; margin-top:0;" class="hd-mg-ctn">
+                                                <h3>Umar Zubair</h3>
+                                                <div class="driver-infograph">
+                                                    <span class="percent"><span class="counter">55</span>%</span><br />
+                                                    <span class="pername">Drowsiness Rate</span>
+                                                </div>
+                                                <div class="driver-infograph"
+                                                    style="background-color: rgba(231, 94, 94, 0.3);">
+                                                    <span class="percent"><span class="counter">92</span>% <i
+                                                            style="color: red;" class="fa fa-arrow-up"></i></span><br />
+                                                    <span class="pername">Distraction Rate</span>
+                                                </div>
+                                                <div class="driver-infograph">
+                                                    <span class="percent"><span class="counter">13</span>%</span><br />
+                                                    <span class="pername">Unauthorization Rate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div> -->
+                    </div>
+                    <!-- End Sale Statistic area-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(months[today.getMonth()]);
+        var yyyy = today.getFullYear();
+        today = mm + ' ' + dd + ', ' + yyyy;
+        document.getElementById("date").innerHTML = today;
+
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            var ampm = h >= 12 ? 'pm' : 'am';
+            h = h % 12;
+            h = h ? h : 12;
+            m = m < 10 ? '0' + m : m;
+            s = s < 10 ? '0' + s : s;
+            document.getElementById("time").innerHTML = h + ":" + m + ":" + s + ' ' + ampm;
+            var t = setTimeout(startTime, 500);
+        }
+
+        var socket = io.connect('http://localhost:3000');
+        socket.on('new_ride', function (ride) {
+            var flag = 0;
+           // var rate = (ride.rateDistract + ride.rateDrowsy) / 2;
+            $("#ride_table tr").map(function () {
+                if (this.id === "ride-" + ride.driverID) {
+                    $('#' + this.id + ' td:nth-child(3)').html(ride.currLoc);
+                    $('#' + this.id + ' td:nth-child(4)').html(ride.distance);
+                    //$('#' + this.id + ' td:nth-child(5)').html(rate);
+                    $('#' + this.id + ' td:nth-child(5)').html(ride.authName);
+                    if(ride.authName == "NOT AUTHORIZED") {
+                        $('#' + this.id).css("background-color", "rgba(255, 0, 0, 0.2)");
+                    }
+                    if(ride.authName == "AUTHORIZED") {
+                        $('#' + this.id).css("background-color", "");
+                    }
+                    flag = 1;
+                }
+            });
+
+            if (flag == 0) {
+                document.getElementById("rides-count").innerHTML = parseInt(document.getElementById("rides-count").innerHTML)+1;
+                var tr = document.createElement("tr");
+                tr.setAttribute("id", "ride-" + ride.driverID);
+
+                var td, td_text;
+
+                var path = "../" + ride.driverDP;
+                td = document.createElement("td");
+                im = document.createElement("img");
+                im.setAttribute("src", path);
+                im.setAttribute("width", "80px");
+                im.style.borderRadius = "40px";
+                td.appendChild(im);
+                tr.appendChild(td);
+
+                td = document.createElement("td");
+                td.style.verticalAlign = "middle";
+                td_text = document.createTextNode(ride.driverName);
+                td.appendChild(td_text);
+                tr.appendChild(td);
+
+                td = document.createElement("td");
+                td.style.verticalAlign = "middle";
+                td_text = document.createTextNode(ride.startLoc);
+                td.appendChild(td_text);
+                tr.appendChild(td);
+
+                td = document.createElement("td");
+                td.style.verticalAlign = "middle";
+                td_text = document.createTextNode(ride.distance);
+                td.appendChild(td_text);
+                tr.appendChild(td);
+
+                /*td = document.createElement("td");
+                td_text = document.createTextNode(rate);
+                td.appendChild(td_text);
+                tr.appendChild(td);*/
+
+                td = document.createElement("td");
+                td.style.verticalAlign = "middle";
+                td_text = document.createTextNode(ride.authName);
+                td.appendChild(td_text);
+                tr.appendChild(td);
+
+                document.getElementById("ride_table").appendChild(tr);
+            }
+        });
+
+        socket.on('end_ride', function (ride, authName, duration) {
+            document.getElementById("rides-count").innerHTML = parseInt(document.getElementById("rides-count").innerHTML)-1;
+            var countDrowsy = 0;
+            var countDistract = 0;
+            ride.distractions.forEach(dist => {
+                if(dist.distraction_type === "Drowsy") {
+                    countDrowsy = countDrowsy + dist.count;
+                }
+            });
+           
+            ride.distractions.forEach(dist => {
+                if(dist.distraction_type === "Distract") {
+                    countDistract = countDistract + dist.count;
+                }
+            });
+          
+            var rateDrowsy = (10-(((countDrowsy)/duration)*100)).toFixed(2);
+            var rateDistract = (10-(((countDistract)/duration)*100)).toFixed(2);          
+           
+            var perRate =(parseFloat(rateDistract) + parseFloat(rateDrowsy)) / 2;
+            var per = ((perRate.toFixed(2) / 10) * 100).toFixed(2);
+
+            $("#ride_table tr").map(function () {
+                if (this.id === "ride-" + ride.driverId) {
+                    $('#' + this.id).remove();
+                }
+            });
+            
+            var tr = document.createElement("tr");
+            tr.setAttribute("id", "endRide-" + ride._id);
+            if(authName == "NOT AUTHORIZED") {
+                tr.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
+            }
+
+            var td, td_text;
+          
+            var path = "../" + ride.driverDP;
+            td = document.createElement("td");
+            im = document.createElement("img");
+            im.setAttribute("src", path);
+            im.setAttribute("width", "80px");
+            im.style.borderRadius = "40px";
+            td.appendChild(im);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            td.style.verticalAlign = "middle";
+            td_text = document.createTextNode(ride.driverName);
+            td.appendChild(td_text);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            td.style.verticalAlign = "middle";
+            td_text = document.createTextNode(ride.ride_date);
+            td.appendChild(td_text);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            td.style.verticalAlign = "middle";
+            td_text = document.createTextNode(authName);
+            td.appendChild(td_text);
+            tr.appendChild(td); 
+
+            td = document.createElement("td");
+            td.style.verticalAlign = "middle";
+            td_text = document.createTextNode(perRate);
+            div = document.createElement("div");
+            div.classList.add("progress");
+            /*div2 = document.createElement("div");
+            div2.classList.add("progress-bar");
+            div2.setAttribute("role", "progressbar");
+            div2.setAttribute("aria-valuemin", "0");
+            div2.setAttribute("aria-valuemax", "100");
+            if(per > 85) {
+                div2.classList.add("progress-bar-success");
+                div2.style.width = per+"%";
+            } else if (per >= 40 || per <= 85) {
+                div2.classList.add("progress-bar-warning");
+                div2.style.width = per+"%";
+            } else {
+                div2.classList.add("progress-bar-danger");
+                 div2.style.width = per+"%";
+            }
+             var p = document.createTextNode(per);
+            div2.appendChild(p); 
+            div.appendChild(div2);*/
+            td.appendChild(td_text);
+            td.appendChild(div); 
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            td.style.verticalAlign = "middle";
+            a = document.createElement("a");
+            var t = document.createTextNode("View Details");
+            a.setAttribute("target", "_blank");
+            a.setAttribute("href", "/ridelogs?logID="+ride._id+"&dID="+ride.driverId);
+            a.style.textDecoration = "underline";
+            a.appendChild(t);
+            td.appendChild(a);
+            tr.appendChild(td);
+
+            document.getElementById("recent_rides").prepend(tr);
+        });
+       
+    </script>
+
+    <% include partials/foot %>
+</body>
+
+</html>

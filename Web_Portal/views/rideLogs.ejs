@@ -1,0 +1,632 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <title>Driver Distraction Logs</title>
+    <% include partials/head %>
+    <!-- feather Awesome -->
+    <link rel="stylesheet" type="text/css" href="..\files\assets\icon\feather\css\feather.css">
+
+    <style>
+        .card {
+            padding-top: 20px;
+            margin: 10px 0 0 0;
+            background-color: rgba(214, 224, 226, 0.2);
+            border-top-width: 0;
+            border-bottom-width: 2px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .card.hovercard {
+            position: relative;
+            padding-top: 0;
+            overflow: hidden;
+            text-align: center;
+            background-color: rgba(214, 224, 226, 0.1);
+        }
+        .card.hovercard .cardheader {
+            background: url("../images/header-bg.png");
+            background-size: cover;
+            height: 200px;
+        }
+        .card.hovercard .avatar {
+            position: relative;
+            top: -155px;
+            margin-bottom: -140px;
+        }
+        .card.hovercard .avatar img {
+            width: 200px;
+            height: 200px;
+            max-width: 200px;
+            max-height: 200px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            border: 5px solid rgb(255,255,255);
+        }
+        .card.hovercard .info {
+            padding: 0px 8px 10px;
+            display: none;
+        }
+        .card.hovercard .info .title {
+            margin-bottom: 4px;
+            font-size: 24px;
+            line-height: 1;
+            color: #262626;
+            vertical-align: middle;
+        }
+
+        .log-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+            border: none;
+            margin-bottom: 30px;
+        }
+        .log-card .log-card-header h4 {
+            margin-bottom: 0;
+            color: #505458;
+            font-size: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 15px;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+        .log-card-block {
+            padding: 1.25rem;
+        }
+        .log-card-block h2 {
+            border: 1px solid #ccc;
+            padding: 30px 30px;
+            color: #ccc;
+            text-align: center;
+        }
+        .latest-activity-card .log-card-block .latest-update-box {
+            position: relative;
+        }
+        
+        .latest-activity-card .log-card-block .latest-update-box .update-meta {
+            z-index: 2;
+            min-width: 160px;
+        }
+        
+        .log-card .log-card-block p {
+            line-height: 25px;
+            text-align: left;
+        }
+        .log-card .log-card-block .log-box p {
+            margin-left: 70px;
+            color: #aaa7a7;
+            line-height: 20px;
+            margin-top: 8px;
+            margin-bottom: 25px;
+        }
+        .latest-activity-card .log-card-block .latest-update-box .update-meta .update-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            padding: 12px 13px;
+            font-size: 16px;
+            color: #fff;
+            margin-left: 10px;
+            float: left;
+        }
+        .log-content {
+            margin-bottom: 20px;
+        }
+        .log-head {
+            background-color: #120f08;
+            padding: 10px 10px;
+        }
+        .log-head h4 {
+            color: #fff;
+            margin-bottom: 0;
+        }
+        .log-body {
+            background-color: #fcfcfc;
+            border: 1px solid #f5f5f5;
+            
+        }
+        .log-desc {
+            margin-bottom: 20px;
+            padding: 10px 10px;
+            background-image: linear-gradient(#ebebeb, #f9f9f9);
+            border: 1px solid #ebebeb;
+        }
+        .log-desc p {
+            margin-bottom: 0;
+            font-size: 15px;
+        }
+        .log-box{
+            text-align: center;
+        }
+
+
+        /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 999999999; /* Sit on top */
+        padding-top: 50px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        }
+        /* Modal Content (image) */
+        .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        }
+        /* Add Animation */
+        .modal-content {  
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+        }
+        @-webkit-keyframes zoom {
+        from {-webkit-transform:scale(0)} 
+        to {-webkit-transform:scale(1)}
+        }
+        @keyframes zoom {
+        from {transform:scale(0)} 
+        to {transform:scale(1)}
+        }
+        /* The Close Button */
+        .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+        }
+        /* 100% Image Width on Smaller Screens */
+        @media only screen and (max-width: 700px){
+            .modal-content {
+                width: 100%;
+            }
+        }
+        fieldset {
+            margin: 20px 15px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #1C1C1C;
+        }
+        .Legend_css { /* This is lagend css class use in html */
+            background-color: #1C1C1C;
+            width: 115px;
+            margin-bottom: 0;
+            color: #ffffff;
+            font-size: 17px;
+            padding-left: 10px;
+        }
+        fieldset p {
+            color: #5e5e5e;
+        }
+        .back-panel {
+            padding: 20px 14px;
+            background-color: #fbfbfb;
+            margin-bottom: 20px;
+        }
+        .perform h5 {
+            font-size: 18px;
+            margin-top: 220px;
+            margin-left: 10px;
+            text-decoration: underline;
+        }
+        .inner-details {
+            margin-left: 10px;
+            margin-top: 70px;
+            float: left;
+        }
+        .gauge-container {
+            width: 200px;
+            height: 200px;
+            display: block;
+            padding: 10px;
+            overflow: hidden;
+            margin-left: 80px;
+        }
+        .gauge-container.one > .gauge > .dial {
+            stroke: #f00;
+            stroke-width: 8;
+        }
+        
+        .gauge-container.one > .gauge > .value {
+            stroke: #76DA43;
+            stroke-width: 8;
+        }
+        
+        .gauge-container.one > .gauge > .value-text {
+            fill: #000;
+            font-family: sans, 'sans-serif';
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .table-responsive {
+            border: 1px solid #ccc;
+            margin-left: 10px;
+        }
+        .table-hover.evidences {
+            font-family: 'Roboto';
+        }
+        .table-hover.evidences thead{
+            border-bottom: 2px solid #e9ecef !important;
+            background: linear-gradient(to bottom, #88aefb, #4267b2);
+        }
+        .table-hover.evidences thead tr th{
+            color: #fff;
+            font-size: 16px;
+            padding: 5px 10px;
+        }
+        .table-hover.evidences tbody tr td, .table-hover.evidences tbody tr td label {
+            font-size: 15px;
+            color: #000;
+            padding: 8px;
+        }
+        .table-hover.evidences tbody tr td a:hover {
+            color: #000;
+        }
+        .progress {
+            background-color: #e7e5e5;
+            border-radius: 0;
+            box-shadow: none;
+            height: 5px;
+            overflow: visible;
+            position: relative;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body onload="startTime()">
+    <% include partials/topBar %>
+
+    <div class="container-fluid" style="padding-left: 0;">
+        <div class="row">
+            <div class="col-md-2">
+                <div id="cssmenu">
+                    <img src="../public/img/innerLogo.png" width="160px"
+                        style=" margin-left: 60px; margin-top: -130px;" />
+                    <ul>
+                        <li><a href="/dashboard"><i class="fa fa-fw fa-home"></i> Dashboard</a></li>
+                        <li class="has-sub"><a href="#"><i class="fa fa-fw fa-users"></i> Manage Drivers</a>
+                            <ul>
+                                <li><a href="/crud/add"><i class="fa fa-fw fa-user-plus"></i> Add New Driver</a></li>
+                                <li><a href="/crud/list-of-drivers"><i class="fa fa-fw fa-list"></i> List of Drivers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="/messenger"><i class="fa fa-fw fa-commenting"></i> Messenger</a></li>
+                        <li><a href="/updateProfile"><i class="fa fa-fw fa-newspaper-o"></i> My Profile</a>
+                        </li>
+                        <li><a href="/logout"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <!-- Breadcomb area Start-->
+                <div class="breadcomb-area">
+                    <div class="container" style="padding: 0;">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="breadcomb-list">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="breadcomb-wp">
+                                                <div class="breadcomb-icon">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                                <div class="breadcomb-ctn">
+                                                    <h2>Driver's Distraction Log</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Breadcomb area End-->
+
+                <div class="container" style="padding: 0;">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card hovercard">
+                                <div class="cardheader">
+                
+                                </div>
+                                <div class="avatar">
+                                    <%  var fullpath= '../' + driver.profilePicture.path; %>
+                                    <img alt="" src="<%= fullpath %>">
+                                </div>
+                                <div class="info">
+                                    <div class="title">
+                                        <%=driver.firstName + " " + driver.lastName%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 back-panel">
+                            <h4 style= "margin: 10px 16px; font-size: 20px; color: #333;">Driver Details: </h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="log-card latest-activity-card">
+                                    <div class="log-card-header">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="padding: 20px 30px;">
+                                                <p style="font-size: 17px;"><i class="fa fa-user" style="color: #4267b2; font-size: 20px;"></i>&nbsp;&nbsp;<b>Driver Name: </b>&nbsp;&nbsp;&nbsp;&nbsp;<%= driver.firstName + " " + driver.lastName%></p>
+                                                <br/>
+                                                <p style="font-size: 17px;"><i class="fa fa-phone" style="color: #4267b2; font-size: 20px;"></i>&nbsp;&nbsp;<b>Driver Phone: </b>&nbsp;&nbsp;&nbsp;<%= driver.phoneNumber %></p>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="padding: 20px 30px;">
+                                                <p style="font-size: 17px;"><i class="fas fa-id-card" style="color: #4267b2; font-size: 20px;"></i>&nbsp;&nbsp;<b>Driver CNIC: </b>&nbsp;&nbsp;&nbsp;<%= driver.cnic %></p>
+                                                <br/>
+                                                <p style="font-size: 17px;"><i class="fa fa-envelope" style="color: #4267b2; font-size: 20px;"></i>&nbsp;&nbsp;<b>Driver Email: </b>&nbsp;&nbsp;&nbsp;<%= driver.email %></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 style= "margin: 10px 16px; font-size: 20px; color: #333;">Ride Details: </h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="log-card latest-activity-card">
+                                    <div class="log-card-header">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 20px 30px;">
+                                                <table style="font-size: 17px;">
+                                                    <tr>
+                                                        <td style="width: 30px; height: 50px;"><i class="fa fa-road" style="color: #4267b2; font-size: 20px;"></i></td>
+                                                        <td style="width: 190px;"><b>Distance Covered: </b></td>
+                                                        <td><%= ride.distance_covered %> Km<br></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height: 50px;"><i class="fa fa-clock-o" style="color: #4267b2; font-size: 20px;"></i></td>
+                                                        <td><b>Duration: </b></td>
+                                                        <td><%= parseInt(ride.ride_duration/60) %> Minutes <%= (ride.ride_duration%60) %> Seconds</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height: 50px;"><i class="fa fa-map-marker" style="color: #4267b2; font-size: 20px;"></i></td>
+                                                        <td><b>Start Location: </b></td>
+                                                        <td><%= ride.start_location %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height: 50px;"><i class="fa fa-map-marker" style="color: #4267b2; font-size: 20px;"></i></td>
+                                                        <td><b>End Location: </b></td>
+                                                        <td><%= ride.end_location %></td>
+                                                    </tr>   
+                                                    <tr>
+                                                        <td style="height: 50px;"><i class="fa fa-map-marker" style="color: #4267b2; font-size: 20px;"></i></td>
+                                                        <td><b>Authorization Status: </b></td>
+                                                        <% if (ride.authorized === 'AUTHORIZED') {
+                                                        %>
+                                                            <td><i class="fa fa-check" style="font-size: 18px; margin-right: 8px; color: #2ccc04; font-weight: bold;"></i><%= ride.authorized %></td>
+                                                        <% }
+                                                        if (ride.authorized === 'NOT AUTHORIZED') {
+                                                        %>
+                                                            <td><i class="fa fa-close" style="font-size: 18px; margin-right: 8px; color: #dd0707; font-weight: bold;"></i><%= ride.authorized %></td>
+                                                        <%
+                                                        } %>
+                                                    </tr>                                 
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 style= "margin: 10px 16px; font-size: 20px; color: #333;">Performance Details: </h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="log-card latest-activity-card">
+                                    <div class="log-card-header">
+                                        <div class="row perform">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="padding: 20px 30px;">
+                                                <div class="perform-details">
+                                                    <div id="gauge1" class="gauge-container one" style="float:left;"></div>
+                                                    <div class="inner-details">
+                                                        <i class="fa fa-square" style="color: #76DA43;"></i> &nbsp;Safe driving <br/>
+                                                        <i class="fa fa-square" style="color: #f00;"></i> &nbsp;Distracted driving
+                                                    </div>
+                                                </div>
+                                                <h5>Distraction Details:</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-borderless evidences">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 160px">Type</th>
+                                                                <th>Time</th>
+                                                                <th>Evidence</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% 
+                                                            var type = "";
+                                                            var per = "";
+                                                            ride.distractions.forEach(dist => {
+                                                                var fullpath= '../' + dist.evidence_path;
+                                                                if(dist.distraction_type === "Distract") { 
+                                                                    if(dist.count === 1) {
+                                                                        type = "Low";
+                                                                        per = "25%";
+                                                                    } 
+                                                                    if(dist.count === 2) {
+                                                                        type = "Mild";
+                                                                        per = "60%";
+                                                                    }
+                                                                    if(dist.count === 3) {
+                                                                        type = "Severe";
+                                                                        per = "100%";
+                                                                    }
+                                                            %> 
+                                                            <tr>
+                                                                <td><label class="label"><%= type %></label>
+                                                                    <div class="progress" style="width: 80%">
+                                                                    <div class="progress-bar wow fadeInLeft" style="width: <%= per %>; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft; background: #f00;" data-wow-duration="1.5s" data-wow-delay="1.2s"></div>
+                                                                    </div>
+                                                                </td>
+                                                                <td><%= dist.distraction_time %></td>
+                                                                <td><a style="cursor: pointer; text-decoration: underline;" onclick='openImg("<%= dist._id %>", "<%= fullpath %>")'>View Evidence</a></td>
+                                                            </tr>
+                                                            <% } }); %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="padding: 20px 30px; border-left: 1px solid #ccc">
+                                                <div class="perform-details" style="float: left;">
+                                                    <div id="gauge2" class="gauge-container one" style="float:left;"></div>
+                                                    <div class="inner-details">
+                                                        <i class="fa fa-square" style="color: #76DA43;"></i> &nbsp;Safe driving <br/>
+                                                        <i class="fa fa-square" style="color: #f00;"></i> &nbsp;Drowsy driving
+                                                    </div>
+                                                </div>
+                                                <h5>Drowsiness Details</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-borderless evidences">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 160px">Type</th>
+                                                                <th>Time</th>
+                                                                <th>Evidence</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% 
+                                                            var type = "";
+                                                            var per = "";
+                                                            ride.distractions.forEach(dist => {
+                                                                var fullpath= '../' + dist.evidence_path;
+                                                                if(dist.distraction_type === "Drowsy") { 
+                                                                    if(dist.count === 1) {
+                                                                        type = "Low";
+                                                                        per = "25%";
+                                                                    } 
+                                                                    if(dist.count === 2) {
+                                                                        type = "Mild";
+                                                                        per = "60%";
+                                                                    }
+                                                                    if(dist.count === 3) {
+                                                                        type = "Severe";
+                                                                        per = "100%";
+                                                                    }
+                                                            %> 
+                                                            <tr>
+                                                                <td><label class="label"><%= type %></label>
+                                                                    <div class="progress" style="width: 80%">
+                                                                    <div class="progress-bar wow fadeInLeft" style="width: <%= per %>; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft; background: #f00;" data-wow-duration="1.5s" data-wow-delay="1.2s"></div>
+                                                                    </div>
+                                                                </td>
+                                                                <td><%= dist.distraction_time %></td>
+                                                                <td><a style="cursor: pointer; text-decoration: underline;" onclick='openImg("<%= dist._id %>", "<%= fullpath %>")'>View Evidence</a></td>
+                                                            </tr>
+                                                            <% } }); %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
+
+    <% include partials/foot %>
+
+    <script type="text/javascript" src="../js/gauge.js"> </script>
+
+    <script>
+        var socket = io.connect('http://localhost:3000');
+        $(document).ready(function () {
+            if ('<%= notify%>' === "yes") {
+                var i = 0;
+                socket.emit('ReadNotify', { count : 0, notifyID:'<%= notifyID %>' });
+            }
+            var perDrowsy = (("<%= ride.rate_drowsy %>" / 10) * 100).toFixed(2);
+            var perDistract = (("<%= ride.rate_distraction %>" / 10) * 100).toFixed(2);
+            gauge1.setValueAnimated(perDistract, 1);
+            gauge2.setValueAnimated(perDrowsy, 1);
+        });
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+        function openImg(id, img) {
+            modal.style.display = "block";
+            modalImg.src = img;
+        }
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() { 
+            modal.style.display = "none";
+        }
+
+        var gauge1 = Gauge(
+            document.getElementById("gauge1"),
+		    {
+                max: 100,
+                dialStartAngle: -90,
+                dialEndAngle: -90.001,
+                value: 0,
+                label: function(value) {
+                    return (Math.round(value * 100) / 100) + "%";
+                }
+            }
+        );
+        var gauge2 = Gauge(
+            document.getElementById("gauge2"),
+		    {
+                max: 100,
+                dialStartAngle: -90,
+                dialEndAngle: -90.001,
+                value: 0,
+                label: function(value) {
+                    return (Math.round(value * 100) / 100) + "%";
+                }
+            }
+        );
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<script src="../../top.js"></script>
+<script src="../../chat.js"></script>
+
+<style>
+    .nav>li>a {
+        display: inline;
+    }
+    #notify-list .hd-mg-ctn p {
+        white-space: unset;
+    }
+</style>
+<!-- Start Header Top Area -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class = "col-md-10" style="padding-left: 0; padding-right: 0;">
+            <div id="sticky-copy" style="height: 40px; background: #FAF9F9;">
+            </div>
+            <div id="navbar" class="header-top-area" style="position: relative;">
+        
+                <!-- <div class = "col-md-2" style="background-color: #C5C5C5;">
+                    <img src="../public/img/innerLogo.png" width="160px" style="position: absolute; margin-left: 60px; margin-top: 10px;" />
+                </div> -->
+                
+                <div class="header-top-menu">
+                    <ul class="nav navbar-nav notika-top-nav">
+                        <li class="nav-item">
+                            <div class="logo-area" style="position: relative;">
+                                <img src="../../public/img/m.png" width="30px" alt="" />
+                                <span id="welcome">&nbsp;&nbsp;<%= ManagerName %></span>
+                                <span id="welcomeId" style="display: none;"><%= ManagerID %></span>
+                            </div>
+                        </li>
+                        <li id="msg-noti" class="nav-item dropdown">
+                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false"
+                                class="nav-link dropdown-toggle"><span><i class="fa fa-envelope"
+                                        style="font-size: 20px"></i></span></a>
+                            <div role="menu" class="dropdown-menu message-dd animated zoomIn" style="margin-top: 20px;">
+                                <div class="hd-mg-tt" style="border-bottom: 2px solid #f5f5f5;">
+                                    <h2>Messages</h2>
+                                </div>
+                                <div class="hd-message-info">
+                                    <ul id="msgs-icon">
+                                        <% 
+                                            messages.forEach(msg => {
+                                                var fullpath= '../' + msg.driverDP;
+                                                var lastMsg = (msg.chat[msg.chat.length-1]).message_body;
+                                                if(msg.mmessage_status === "unread") {
+                                        %>
+                                        <li id='not-<%= msg.driverId %>' style="background-color: rgb(236, 236, 236);">
+                                            <% } else {%>
+                                        <li id='not-<%= msg.driverId %>' style="background-color: #fff;">
+                                            <%}%>
+                                        <a href= "/messenger/id?id=<%=msg.driverId%>" style="cursor: pointer">
+                                            <div class="hd-message-sn">
+                                                <div class="hd-message-img">
+                                                    <img src="<%= fullpath %>" alt="" />
+                                                </div>
+                                                <div class="hd-mg-ctn">
+                                                    <h3><%= msg.driverName %></h3>
+                                                    <p><%= lastMsg %></p>
+                                                </div>
+                                            </div>
+                                            </a>
+                                        </li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+                                <div class="hd-mg-va">
+                                    <a href="/messenger">View All</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item nc-al"><a href="#" data-toggle="dropdown" role="button"
+                                aria-expanded="false" class="nav-link dropdown-toggle"><span><i class="fa fa-bell"
+                                        style="font-size: 20px"></i></span>
+
+                                <% if(count > 0) {%>
+                                <div id="spinnerDiv" class="spinner4 spinner-4" style="top: 10px;"></div>
+                                <div id="badgeDiv" class="ntd-ctn" style="top: 15px;"><span
+                                        id="badgeId"><%= count %></span></div>
+                                <%}else {%>
+                                <div id="spinnerDiv" class="spinner4 spinner-4" style="top: 10px; display: none;">
+                                </div>
+                                <div id="badgeDiv" class="ntd-ctn" style="top: 15px; display: none;"><span
+                                        id="badgeId"><%= count %></span></div>
+                                <%}%>
+                                   
+                                </a>
+                                <div role="menu" class="dropdown-menu message-dd notification-dd animated zoomIn" style="padding-bottom: 2px; margin-top: 20px;">
+                                    <div class="hd-mg-tt" style="border-bottom: 2px solid #f5f5f5;">
+                                        <h2>Notification</h2>
+                                    </div>
+                                    <div class="hd-message-info" style="height: 500px; overflow: auto;">
+                                        <ul id="notify-list">
+                                                <% 
+                                                notifications.forEach(notify => {
+                                                    var fullpath= '../' + notify.notification_driverDP;
+                                                    if(notify.notification_status === "unread") {
+                                            %>
+                                            <li id='notify-<%= notify._id %>' style="background-color: rgb(236, 236, 236);">
+                                                <% } else {%>
+                                            <li id='notify-<%= notify._id %>' style="background-color: #fff;">
+                                                <%}%>
+                                            <a href= "/ridelogs?logID=<%=notify.notification_rideID%>&dID=<%=notify.notification_driverID%>&notification=yes&notifyID=<%=notify._id%>" target="_blank" style="cursor: pointer">
+                                                <div class="hd-message-sn">
+                                                    <div class="hd-message-img">
+                                                        <img src="<%= fullpath %>" alt="" />
+                                                    </div>
+                                                    <div class="hd-mg-ctn">
+                                                        <h3><%= notify.notification_title %></h3>
+                                                        <p><%= notify.notification_body %></p>
+                                                    </div>
+                                                </div>
+                                                </a>
+                                            </li>
+                                            <% }) %>
+                                        </ul>
+                                    </div>
+                                   <!--  <% if(notifications.length > 0) { %>
+                                    <div class="hd-mg-va">
+                                        <a href="#">View All</a>
+                                    </div>
+                                    <% } %> -->
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a>
+                                <% if(countNotify > 0) { %>
+                                <div id="spinnerDiv2" class="spinner4 spinner-4" style="top: 10px;"></div>
+                                <div id="badgeDiv2" class="ntd-ctn" style="top: 15px;"><span id="badgeId2"><%= countNotify %></span></div>
+                                <%}else {%>
+                                    <div id="spinnerDiv2" class="spinner4 spinner-4" style="top: 10px; display: none;">
+                                    </div>
+                                    <div id="badgeDiv2" class="ntd-ctn" style="top: 15px; display: none;"><span
+                                            id="badgeId2"><%= countNotify %></span></div>
+                                    <%}%>
+                                       
+                                </a>
+                            </li>
+                        </ul>
+                      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- End Header Top Area -->
+<script>
+    $(document).ready(function () {
+        if ('<%= count %>' > 0) {
+            $("#spinnerDiv").show();
+            $("#badgeDiv").show();
+        }
+        if ('<%= countNotify %>' > 0) {
+            $("#spinnerDiv2").show();
+            $("#badgeDiv2").show();
+        }
+    });
+  
+</script>
