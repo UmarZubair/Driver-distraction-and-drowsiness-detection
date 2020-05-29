@@ -3,9 +3,9 @@
 ## Overview
 •	A software system created for ride-hailing companies to insure the safety of both drivers and passengers by detecting driver drowsiness and driver detection. 
 
-The system also detects unauthorized drivers and notifies the company in case of unauthorized access. This is will done through phone placed on the car’s dashboard. 
+•	The system also detects unauthorized drivers and notifies the company in case of unauthorized access. This is will done through phone placed on the car’s dashboard. 
 
-At the end of the ride, the application will also evaluate driver performance based on distraction and drowsiness rate.
+•	At the end of the ride, the application will also evaluate driver performance based on distraction and drowsiness rate.
 
 ## Demo
 [![Watch](https://i.imgur.com/FUxCPvE.png)](https://www.youtube.com/watch?v=cty9xi8G9kk)
