@@ -20,8 +20,6 @@
 ## Frameworks and libraries used
 Tensorflow 
 
-Keras
-
 React-native
 
 Flask
