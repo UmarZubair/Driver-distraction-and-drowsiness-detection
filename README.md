@@ -18,11 +18,11 @@ https://www.youtube.com/watch?v=cty9xi8G9kk
 •	The video shows that the system is even working in the night with good accuracy.
 
 ## Frameworks and libraries used
-Tensorflow 
-Keras
-React-native
-Flask
-DiLib
-Node.js
+Tensorflow <br/>
+Keras<br/>
+React-native<br/>
+Flask<br/>
+DiLib<br/>
+Node.js<br/>
 Android Studio
 
