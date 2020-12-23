@@ -19,14 +19,10 @@ https://www.youtube.com/watch?v=cty9xi8G9kk
 
 ## Frameworks and libraries used
 Tensorflow 
-
+Keras
 React-native
-
 Flask
-
 DiLib
-
 Node.js
-
 Android Studio
 
